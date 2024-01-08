@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}
+	Wishlist
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+    {% if message %}
+    	<h5 class="has-text-danger">{{ message }}</h5>
+    {% endif %}
+
+        <h2>Wish List</h2>
+
+        {% if items %}
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="100">
+                            </td>
+                            <td>{{ item.product.name }}</td>
+                            <td>${{ item.product.price }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'cart_update' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{ item.product.id }}">
+
+                                        <button class="btn btn-primary shadow-0 me-1 d-inline" type="submit" name="action" value="add">
+                                            Add to cart <i class="fas fa-shopping-cart ms-1"></i>
+                                        </button>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn btn-warning shadow-0 me-1 d-inline">Remove from wishlist</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+            <a href="{% url 'discard_wishlist' %}" class="btn btn-danger shadow-0">Clear all products</a>
+        {% else %}
+            <p>Your wishlist is empty.</p>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+        {% endif %}
+    </div>
+
+{% endblock %}

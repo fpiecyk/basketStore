@@ -1,0 +1,12 @@
+name,price,category_id,description,image
+Full cap,30,1,lorem,uploads/products/boston2.jpg
+Full cap,30,1,lorem,uploads/products/charlotte2.jpg
+Full cap,30,1,lorem,uploads/products/gsw.jpg
+Full cap,30,1,lorem,uploads/products/knicks.jpg
+Full cap,30,1,lorem,uploads/products/lakers2.jpg
+Full cap,30,1,lorem,uploads/products/milwaukee2.jpg
+Full cap,30,1,lorem,uploads/products/philly.jpg
+Full cap,30,1,lorem,uploads/products/phoenix2.jpg
+Full cap,30,1,lorem,uploads/products/product_list_head.csv
+Full cap,30,1,lorem,uploads/products/sacramento.jpg
+Full cap,30,1,lorem,uploads/products/utils.py

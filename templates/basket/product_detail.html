@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}
+	{{ product.name }}
+{% endblock %}
+{% block content %}
+
+<!--Main layout-->
+<main class="mt-5 pt-4">
+    <div class="container mt-5">
+        <!--Grid row-->
+        <div class="row">
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+                <img src="{{ product.image.url}}" class="img-fluid" alt="{{ product.name }}" />
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+                <!--Content-->
+                <div class="p-4">
+                    <div class="mb-3">
+                        <span class="badge bg-info me-1">{{ product.category }}</span>
+                        <span class="badge bg-danger me-1">{{ product.name }}</span>
+                    </div>
+
+                    <p class="lead">
+                        <span>${{product.price}}</span>
+                    </p>
+
+                    <strong><p style="font-size: 20px;">Description</p></strong>
+
+                    <p>{{ product.description }}</p>
+
+                    <form class="d-flex justify-content-left" action="{% url 'add_to_cart' %}" method="POST">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{ product.id }}">
+                        <button class="btn btn-primary shadow-0 me-1 d-inline" type="submit" name="action" value="add">
+                            Add to cart <i class="fas fa-shopping-cart ms-1"></i>
+                        </button>
+                        <a href="{% url 'add_to_wishlist' product.id %}" class="btn btn-light border icon-hover px-2 pt-2">
+                        <i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                    </form>
+
+                </div>
+                <!--Content-->
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+
+        <hr />
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% block title %}
+	Cart
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h2>Your Cart</h2>
+
+        {% if cart %}
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+                            </td>
+                            <td>{{ product.name }}</td>
+                            <td>${{ product.price }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'cart_update' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{ product.id }}">
+                                    <input type="number" name="quantity" value="{{product | cart_quantity:request.session.cart }}">
+                                    <td>
+                                        {{product | price_total:request.session.cart | currency }}
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="action" value="add" class="btn btn-success btn-sm">Add</button>
+                                        <button type="submit" name="action" value="remove" class="btn btn-warning btn-sm">Remove</button>
+                                        <button type="submit" name="action" value="clear" class="btn btn-danger btn-sm">Clear</button>
+                                    </td>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p class="lead">Total: {{ products|cart_total:cart|default:0|floatformat:2|currency }}</p>
+
+            <form method="post" action="{% url 'order_confirmation' %}" class="d-inline">
+              {% csrf_token %}
+                {{ form.as_p }}
+              <button class="btn btn-success" type="submit">Place Order</button>
+            </form>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+        {% else %}
+            <p>Your cart is empty.</p>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
