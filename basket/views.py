@@ -219,45 +219,9 @@ class OrderListView(ListView):
         return Order.objects.filter(customer=user).order_by('-id')  # Adjust the filtering as needed
 
 
-@login_required
-def add_to_wishlist(request, product_id):
-    product = Products.objects.get(id=product_id)
-    username = request.user
-    customer = CustomUser.objects.get(username=username)
-
-    item_added = WishList.objects.filter(product=product_id, customer=customer).exists()
-
-    if item_added:
-        message = f"Item {product.name} is already on your Wish list"
-        items = WishList.objects.filter(customer=customer).order_by('-added')
-        return render(request, "basket/wishlist.html", {"message": message, "items": items})
-
-    else:
-        try:
-            wishlist = WishList(
-                customer=customer,
-                product=product
-            )
-            wishlist.save()
-
-        except Exception as e:
-            print(f"Error occured: {e}")
-            return render(request, 'basket/product_detail.html')
-
-        return redirect('wishlist')
-
-
-@login_required
-def remove_from_wishlist(request, product_id):
-    username = request.user
-    customer = CustomUser.objects.get(username=username)
-    product = WishList.objects.get(product=product_id, customer=customer)
-    product.delete()
-    return redirect("wishlist")
-
-
 class AddToWishlistView(LoginRequiredMixin, View):
     login_url = '/authManager/login/'
+
     def get(self, request, product_id):
         product = Products.objects.get(id=product_id)
         username = request.user
