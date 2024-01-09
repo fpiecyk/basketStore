@@ -21,9 +21,9 @@ class ItemsListView(ListView):
         queryset = Products.get_all_products()
 
         # Filter by category
-        category_id = self.request.GET.get("category")
-        if category_id:
-            queryset = queryset.filter(category_id=category_id)
+        category_list = self.request.GET.getlist("category")
+        if len(category_list):
+            queryset = queryset.filter(category__in=category_list)
 
         # Filter by price range
         min_price = self.request.GET.get("min_price")
